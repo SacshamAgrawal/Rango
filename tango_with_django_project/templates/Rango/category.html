@@ -1,0 +1,27 @@
+{% extends 'Rango/base.html' %}
+{% load staticfiles %}
+{% block title_block %}
+	{{ category.name }}
+{% endblock %}
+
+{% block content %}
+	<div>
+		{% if category %}
+			<h1>{{ category.name }}</h1>
+			{% if pages %}
+				<ul>
+					{% for page in pages %}
+						<li><a href="{{ page.url }}">{{ page.title }}</a></li>
+					{% endfor %}
+				</ul>
+			{% else %}
+				<strong>No pages currently in category.</strong>
+			{% endif %}
+			{% if user.authenticated %}
+			<a href="{% url 'add_page' category.slug %}">ADD Page</a>
+			{% endif %}
+		{% else %}
+			The specified category does not exist!
+		{% endif %}
+	</div>
+{% endblock %}
