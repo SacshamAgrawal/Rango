@@ -1,0 +1,12 @@
+{% extends 'Rango/base.html' %}
+{% block title %}
+	User-Profile Registration
+{% endblock %}
+{% block content %}
+	<form role='form' class="form" method="POST" action="." enctype="multipart/form-data">
+		{% csrf_token %}
+		<h1 class="form-signin-heading">Registration - Step 2</h1>
+		{{ form.as_p }}
+		<button type="submit" value="submit">Update</button>
+	</form>
+{% endblock %}

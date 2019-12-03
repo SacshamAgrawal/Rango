@@ -1,6 +1,6 @@
 {% extends 'Rango/base.html' %}
 {% load staticfiles %}
-{% block title_block %}
+{% block title %}
 	Index
 {% endblock %}
 
@@ -44,8 +44,4 @@
 		</div>
 	</div>
 	<p>Views: {{ visits }} </p>
-	<div>
-		<img src="{% static "images/rango.ico" %}"
-		alt="Picture of Rango" height="200" width="350" />
-	</div>
 {% endblock %}

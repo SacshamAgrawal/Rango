@@ -1,0 +1,40 @@
+{% extends 'Rango/base.html' %}
+{% load staticfiles %}
+{% block title %}
+	{{ selecteduser.username }} Profile
+{% endblock %}
+{% block content %}
+	<div>
+		<h1> {{selecteduser.username}}'s Profile </h1>
+		{% if profile.picture %}
+			<img src="{{MEDIA_URL}}/{{profile.picture}}" 
+			width="300"
+			height="300"
+			alt="User Profile Picture" />
+		{% else %}
+			<img src="/static/images/default.jpg" 
+			width="200"
+			height="200"
+			alt="User Profile Picture" />
+		{% endif %}
+		<hr style="padding:4px; " />
+		
+		{% if selecteduser.username == user.username %}
+			<form method="POST" enctype="multipart/form-data">
+				{% csrf_token %}
+				{{ form.errors }}
+				{{ form.as_p }}	
+				<button class="btn btn-primary" type="submit" value="Update">Update</button>
+			</form>
+		{% else %}
+			<div>
+				<p>
+					E-Mail:<input class="form-control" type="text" value="{{ selecteduser.email }}" readonly="True">
+				</p>
+				<p>
+					Website: <input class="form-control" type="text" value="{{ selecteduser.website }}" readonly="True">
+				</p>
+			</div>
+		{% endif %}
+	</div>
+{% endblock content %}

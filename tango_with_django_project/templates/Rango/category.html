@@ -1,6 +1,6 @@
 {% extends 'Rango/base.html' %}
 {% load staticfiles %}
-{% block title_block %}
+{% block title %}
 	{{ category.name }}
 {% endblock %}
 
@@ -8,20 +8,59 @@
 	<div>
 		{% if category %}
 			<h1>{{ category.name }}</h1>
+			<p><strong>{{category.likes}}</strong> People liked this.
+				<button class="btn btn-primary" style="background-color=#008CBA; border-radius:50%; padding: 4px 15px; font-size:10px; ">Like</button>
+			</p>
 			{% if pages %}
 				<ul>
 					{% for page in pages %}
-						<li><a href="{{ page.url }}">{{ page.title }}</a></li>
+						<li><a href="{% url 'goto'%}?page_id={{page.id}}">{{ page.title }}</a> 
+						<button class="btn btn-primary" style="background-color=#008CBA; border-radius:50%; padding: 4px 7px; font-size:10px; ">{{page.views}}</button>
+						</li>
 					{% endfor %}
 				</ul>
-			{% else %}
-				<strong>No pages currently in category.</strong>
-			{% endif %}
-			{% if user.authenticated %}
+		{% else %}
+			<strong>No pages currently in category.</strong>
+		{% endif %}
+		{% if user.authenticated %}
 			<a href="{% url 'add_page' category.slug %}">ADD Page</a>
 			{% endif %}
 		{% else %}
 			The specified category does not exist!
 		{% endif %}
 	</div>
+	<div>
+		<a href="{% url 'add_page' category.slug %}"><button class="btn btn-primary">
+			Add Page
+		</button> </a>
+	</div>
+	<hr color="#000001" />
+	{% if user.is_authenticated %}
+		<div style="padding:4px;">
+			<h1>Search with Rango</h1>
+			<form class = "form-inline" id="user-form"
+					method="post" action="{% url 'show_category' category.slug %}">
+				{% csrf_token %}
+				<div class="form-group"> 
+					<input type="text" name="query" id="query" size="50" class="form-control" placeholder = "Search here" {% if query %}value="{{query}}"{% endif %}>
+				</div>
+				<button type="submit" class="btn btn-primary" value="Search">Submit</button>
+			</form>
+			<div>
+				{% if result_list %}
+				<h3> Results</h3>
+				<div class="list-group">
+					{% for result in result_list %}
+					<div class="list-group-item">
+						<h4 class="list-group-item-heading">
+							<a href="{{ result.link }}">{{ result.title }}</a>
+						</h4>		
+						<p>{{ result.summary }}</p>			
+					</div>
+					{% endfor %}
+				</div>
+				{% endif %}
+			</div>
+		</div>
+	{% endif %}
 {% endblock %}
