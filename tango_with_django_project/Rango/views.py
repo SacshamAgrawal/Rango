@@ -10,8 +10,8 @@ from datetime import datetime
 from Rango.webhose_search import run_query
 
 def index(request):
-	category_list = Category.objects.order_by('-likes')[:15]
-	page_list = Page.objects.order_by('-views')[:15]
+	category_list = Category.objects.order_by('-likes')[:5]
+	page_list = Page.objects.order_by('-views')[:5]
 	context_dict = { 'categories': category_list , 'pages' : page_list }
 	
 	visitor_cookie_handler(request)
@@ -159,4 +159,53 @@ def track_url(request):
 		else:
 		 	return redirect(index)
 
+@login_required
+def like_category(request):
+	id = None
+	likes = 0
+	if request.method == "GET" :
+		id = request.GET['category_id']
+		if id:
+			cat = Category.objects.get(id=int(id))
+			if cat : 
+				likes = cat.likes + 1
+				cat.likes = likes
+				cat.save()
 
+	return HttpResponse(likes)
+
+def get_category_list(start_with='', max_result=0):
+	cat_list=Category.objects.all()
+	print('hello idiot!!!')
+	if start_with:
+		cat_list = Category.objects.filter(name__istartswith= start_with)
+
+	if max_result > 0:
+		cat_list = cat_list[0:max_result]
+
+	return cat_list
+
+def suggest_category(request):
+	cat_list=Category.objects.all()
+	start_with = ''
+	if request.method == 'GET':
+		start_with = request.GET['suggestion']
+	cat_list = get_category_list(start_with,8)
+	return render(request,'Rango/cats.html',{'cats':cat_list})
+
+@login_required
+def auto_add_page(request):
+	catid=None
+	url=None
+	title=None
+
+	if request.method == 'GET':
+		catid=request.GET['catid']
+		url = request.GET['url']
+		title = request.GET['title']
+		if catid : 
+			category = Category.objects.get(id = int(catid))
+			page = Page.objects.get_or_create(category = category , url = url , title = title)
+
+	pages = Page.objects.filter(category=category).order_by('-views')
+	return render(request,'Rango/page_list.html',{'pages':pages})

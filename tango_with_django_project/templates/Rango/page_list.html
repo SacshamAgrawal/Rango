@@ -1,0 +1,11 @@
+{% if pages %}
+<ul>
+	{% for page in pages %}
+		<li><a href="{% url 'goto'%}?page_id={{page.id}}">{{ page.title }}</a> 
+		<button class="btn btn-primary btn-sm" style="background-color=#008CBA; border-radius:25%; padding: 4px 7px; font-size:10px; ">{{page.views}}</button>
+		</li>
+	{% endfor %}
+</ul>
+{% else %}
+	<strong>No pages currently in category.</strong>
+{% endif %}

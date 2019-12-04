@@ -6,11 +6,11 @@
 
 {% block content %}
 	<div class="jumbotron">
-		<h1 class="display-3">Rango says...</h1>
+		<h1 class="display-2">Rango says...</h1>
 		{% if user.is_authenticated %}
-		<h1>hey there {{ user.username }}!</h1>
+		<h4 class="display-5">hey there {{ user.username }}!</h1>
 		{% else %}
-		<h1>hey there partner! </h1>
+		<h4 class="display-5">hey there partner! </h1>
 		{% endif %}
 	</div>
 	<div class="row marketing">
@@ -21,6 +21,7 @@
 					{% for category in categories %}
 					<li class="list-group-item">
 						<a href="{% url 'show_category' category.slug %}">{{ category.name }}</a>
+						<button class="btn btn-primary btn-sm" style="background-color=#008CBA; border-radius:40%; padding: 4px 7px; font-size:10px; "> {{category.likes}} </button>
 					</li>
 					{% endfor %}
 				</ul>
@@ -35,6 +36,7 @@
 					{% for page in pages %}
 					<li class="list-group-item">
 						<a href="{{ page.url }}">{{ page.title }}</a>
+						<button class="btn btn-primary btn-sm" style="background-color=#008CBA; border-radius:40%; padding: 4px 7px; font-size:10px; ">{{page.views}}</button>
 					</li>
 					{% endfor %}
 				</ul>
